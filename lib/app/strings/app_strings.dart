@@ -41,7 +41,7 @@ class AppStrings {
   static const recentTransactions = 'Recent Transactions';
   static const addTransaction = 'Add Transaction';
   static const editTransaction = 'Edit Transaction';
-  static const noRecentTransactionsTitle = 'Add your first transaction\n by pressing the button below!';
+  static const noRecentTransactionsTitle = "Add your first transaction\n by pressing the '+' button below!";
   static const noTransactionsYetTitle = 'No transactions yet...';
   static const noTransactionsYetBody =
       'Your ledger will show all income and expenses here.\n'
