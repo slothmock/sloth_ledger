@@ -21,45 +21,37 @@ class BottomNavBar extends StatelessWidget {
         height: kBottomNavigationBarHeight,
         child: Row(
           children: [
-            Expanded(
-              child: _NavItem(
-                icon: Icons.home,
-                label: 'Home',
-                selected: currentIndex == 0,
-                onTap: () => onTap(0),
-                activeColor: cs.primary,
-              ),
+            _NavItem(
+              icon: Icons.home,
+              label: 'Home',
+              selected: currentIndex == 0,
+              onTap: () => onTap(0),
+              activeColor: cs.primary,
             ),
-            Expanded(
-              child: _NavItem(
-                icon: Icons.list,
-                label: 'Ledger',
-                selected: currentIndex == 1,
-                onTap: () => onTap(1),
-                activeColor: cs.primary,
-              ),
+            _NavItem(
+              icon: Icons.list,
+              label: 'Ledger',
+              selected: currentIndex == 1,
+              onTap: () => onTap(1),
+              activeColor: cs.primary,
             ),
-
-
+        
+        
             const SizedBox(width: 64),
-
-            Expanded(
-              child: _NavItem(
-                icon: Icons.account_balance,
-                label: 'Accounts',
-                selected: currentIndex == 2,
-                onTap: () => onTap(2),
-                activeColor: cs.primary,
-              ),
+        
+            _NavItem(
+              icon: Icons.account_balance,
+              label: 'Accounts',
+              selected: currentIndex == 2,
+              onTap: () => onTap(2),
+              activeColor: cs.primary,
             ),
-            Expanded(
-              child: _NavItem(
-                icon: Icons.autorenew,
-                label: 'Subscriptions',
-                selected: currentIndex == 3,
-                onTap: () => onTap(3),
-                activeColor: cs.primary,
-              ),
+            _NavItem(
+              icon: Icons.autorenew,
+              label: 'Subscriptions',
+              selected: currentIndex == 3,
+              onTap: () => onTap(3),
+              activeColor: cs.primary,
             ),
           ],
         ),
