@@ -31,7 +31,6 @@ If you build/download a release - a future version will more than likely have br
 - Investment tracking for traditional assets
 - Crypto account support
 - Foreign exchange support for multi currency accounts
-
 - Tests
 
 ## Development Approach
@@ -46,8 +45,8 @@ Refactors and thoughtful feedback are always welcome.
 
 Sloth’s Ledger App is built with Flutter and uses a ledger driven architecture where transactions are the single source of truth.  
 Balances are never treated as authoritative stored values (aside from user-defined starting balances). Instead, they are derived from the transaction history associated with each account. This avoids state drift and ensures that every financial number can be traced back to explicit entries in the ledger.  
-State management is handled using Provider. Core financial state is separated from UI components, with dedicated state classes responsible for accounts, transactions, subscriptions, and application initialization. The UI consumes this state reactively rather than embedding business logic inside widgets.  
-Data persistence is local first and powered by SQLite. A repository layer abstracts database access from the rest of the application. This keeps storage concerns isolated and allows the ledger logic to remain focused on financial calculations rather than persistence details.  
+State management is handled using Provider. Core financial state is separated from UI components, with dedicated state classes responsible for accounts, transactions, subscriptions, and application initialization.
+Data persistence is local-only and powered by SQLite. A repository layer abstracts database access from the rest of the application. This keeps storage concerns isolated and allows the ledger logic to remain focused on financial calculations rather than persistence details.  
 Application startup is gated through an initialization layer that prepares the database and loads required state before the main interface becomes interactive. This keeps bootstrapping predictable and prevents partial state rendering.  
 The architecture is modular by intention. Subscriptions are implemented as structured data that ultimately resolve into ledger relevant behaviour. Future modules such as budgeting, investments, and crypto accounts will extend the same ledger core rather than maintaining parallel financial systems.  
 
@@ -56,3 +55,12 @@ The guiding constraint is simple. Transactions define reality. Everything else i
 ## Expectations
 
 This is a personal project. It may change frequently. Features may evolve or be refactored as the architecture matures.
+
+## Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/ui stitch.png" width="100%">
+</p>
+
+- The screenshot above shows the default empty state when the app is first opened.  
+- Current dashboard totals are early-stage and represent cash plus tracked investment value. This will be refined with better asset/liability separation and liquidity handling in future versions.
