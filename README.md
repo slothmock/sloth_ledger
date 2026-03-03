@@ -1,4 +1,10 @@
 # Sloth’s Ledger App
+![GitHub release](https://img.shields.io/github/v/release/slothmock/sloth_ledger)
+![GitHub downloads](https://img.shields.io/github/downloads/slothmock/sloth_ledger/total)
+![License](https://img.shields.io/github/license/slothmock/sloth_ledger)
+![Status](https://img.shields.io/badge/status-early%20development-orange)
+![Platform](https://img.shields.io/badge/platform-Android-green)
+![Privacy](https://img.shields.io/badge/data-local%20only-success)
 
 I built this Ledger App to help manage my finances in a way that felt intentional, private, and easy.  
 The app works as a manual ledger where the user can create different account types such as cash or debit accounts and transfer funds between them (when they share the same currency).  
