@@ -378,13 +378,6 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   height: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
-              )
-            else
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () =>
-                    context.read<TransactionState>().recent(limit: 25),
-                tooltip: 'Refresh',
               ),
           ],
         ),

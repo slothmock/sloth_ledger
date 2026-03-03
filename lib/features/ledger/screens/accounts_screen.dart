@@ -31,12 +31,6 @@ class AccountsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppStrings.accountsTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => context.read<AccountState>().refresh(),
-          ),
-        ],
       ),
       body: _Body(
         state: state,
