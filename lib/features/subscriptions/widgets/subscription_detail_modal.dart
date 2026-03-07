@@ -106,9 +106,10 @@ class SubscriptionDetailModal extends StatelessWidget {
                           } else {
                             if (!context.mounted) return;
                             CustomInfoToast.show(context, message: 'Marked as paid', duration: const Duration(seconds: 2));
-                            await context.read<TransactionState>().loadAll(force: true);
                             if (!context.mounted) return;
                             await context.read<BalanceState>().load(force: true);
+                            if (!context.mounted) return;
+                            await context.read<TransactionState>().refreshAll();
                             if (!context.mounted) return;
                             Navigator.pop(context);
                           }
