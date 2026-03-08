@@ -8,7 +8,6 @@ import 'package:sloth_budget/domain/accounts/account.dart';
 import 'package:sloth_budget/features/ledger/screens/account_details_screen.dart';
 import 'package:sloth_budget/features/ledger/state/account_state.dart';
 
-import 'package:sloth_budget/features/ledger/state/balance_state.dart';
 import 'package:sloth_budget/features/ledger/modals/transfer_modal.dart';
 import 'package:sloth_budget/app/widgets/add_account_modal.dart';
 

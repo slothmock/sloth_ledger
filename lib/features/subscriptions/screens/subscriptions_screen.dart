@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/app/strings/app_strings.dart';

@@ -7,7 +7,6 @@ import 'package:sloth_budget/app/widgets/add_account_modal.dart';
 import 'package:sloth_budget/app/widgets/bottom_nav_bar.dart';
 import 'package:sloth_budget/features/ledger/ledger.dart';
 
-import 'package:sloth_budget/app/state/category_state.dart';
 import 'package:sloth_budget/features/subscriptions/screens/subscriptions_screen.dart';
 import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_modal.dart';
 

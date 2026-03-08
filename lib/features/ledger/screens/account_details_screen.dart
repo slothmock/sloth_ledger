@@ -7,7 +7,6 @@ import 'package:sloth_budget/app/strings/app_strings.dart';
 import 'package:sloth_budget/domain/accounts/account.dart';
 import 'package:sloth_budget/domain/transactions/transaction.dart';
 import 'package:sloth_budget/features/ledger/ledger.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
 
 enum _AccountMetricMode { balance, netContrib }
 
