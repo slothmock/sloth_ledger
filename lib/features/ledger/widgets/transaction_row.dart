@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/domain/transactions/transaction.dart';
 import 'package:sloth_budget/features/ledger/modals/transaction_detail_modal.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/features/ledger/state/transaction_state.dart';
 import 'package:sloth_budget/features/ledger/utils/relative_labels.dart';
 
-class TransactionRow extends StatelessWidget {
+class TransactionRow extends ConsumerWidget {
   const TransactionRow({
     super.key,
     required this.txn,
@@ -25,8 +24,8 @@ class TransactionRow extends StatelessWidget {
   final bool enableDelete;
 
   @override
-  Widget build(BuildContext context) {
-    final accountState = context.watch<AccountState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountState = ref.watch(accountStateProvider);
     final accountName =
         accountState.byId(txn.accountId)?.name ?? 'Account ${txn.accountId}';
 
@@ -50,11 +49,10 @@ class TransactionRow extends StatelessWidget {
     final merchant = txn.merchant?.trim();
     final title = isTransfer
         ? ((txn.merchant?.trim().isNotEmpty ?? false)
-              ? txn.merchant!.trim()
-              : 'Transfer')
+            ? txn.merchant!.trim()
+            : 'Transfer')
         : ((merchant != null && merchant.isNotEmpty) ? merchant : txn.category);
 
-    // Subtitle line 1: category + account + relative datetime
     final subtitleLine1Parts = <String>[
       dateStr,
       if (showAccountName) accountName,
@@ -62,9 +60,6 @@ class TransactionRow extends StatelessWidget {
     ];
     final subtitleLine1 = subtitleLine1Parts.join(' • ');
 
-    // Subtitle line 2:
-    // - transfers: collapsed transfer puts "From → To" in notes
-    // - normal: show notes if present
     final notes = txn.notes?.trim();
     final subtitleLine2 = (notes != null && notes.isNotEmpty) ? notes : null;
 
@@ -130,10 +125,9 @@ class TransactionRow extends StatelessWidget {
                       style: TextButton.styleFrom(foregroundColor: Colors.red),
                       onPressed: () {
                         Navigator.pop(dialogContext);
-                        context.read<TransactionState>().deleteWithUndo(
-                          context,
-                          txn,
-                        );
+                        ref
+                            .read(transactionStateProvider)
+                            .deleteWithUndo(context, txn);
                       },
                       child: const Text('Delete'),
                     ),
