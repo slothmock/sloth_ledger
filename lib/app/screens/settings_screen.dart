@@ -1,17 +1,15 @@
-import 'package:sloth_budget/app/widgets/error_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_budget/app/widgets/error_toast.dart';
 import 'package:sloth_budget/app/strings/app_strings.dart';
 import 'package:sloth_budget/app/utils/consts.dart';
-import 'package:sloth_budget/app/state/app_reset_state.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
 import 'package:sloth_budget/app/widgets/categories_settings_section.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
 
-import 'package:sloth_budget/features/ledger/ledger.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   static const List<Map<String, String>> _currencies = [
@@ -21,8 +19,8 @@ class SettingsScreen extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsState = ref.watch(settingsStateProvider);
     final settings = settingsState.settings;
 
     return Scaffold(
@@ -31,38 +29,30 @@ class SettingsScreen extends StatelessWidget {
         child: ListView(
           children: [
             const SizedBox(height: 8),
-        
             _sectionHeader(AppStrings.generalTitle),
-        
             ListTile(
               leading: const Icon(Icons.currency_exchange),
               title: const Text(AppStrings.defaultCurrency),
               subtitle: Text(
                 '${settings.currencySymbol} ${settings.currencyCode}',
               ),
-              onTap: () => _showCurrencyPicker(context),
+              onTap: () => _showCurrencyPicker(context, ref),
             ),
-        
             const CategoriesSettingsSection(),
-        
             _sectionHeader(AppStrings.dataTitle),
-        
             ListTile(
               leading: const Icon(Icons.receipt_long),
               title: const Text(AppStrings.deleteHistoryTitle),
               subtitle: const Text(AppStrings.deleteHistorySubtitle),
-              onTap: () => _confirmDeleteTransactions(context),
+              onTap: () => _confirmDeleteTransactions(context, ref),
             ),
-        
             ListTile(
               leading: const Icon(Icons.warning_amber, color: Colors.red),
               title: const Text(AppStrings.resetAppTitle),
               subtitle: const Text(AppStrings.resetAppSubtitle),
-              onTap: () => _confirmResetApp(context),
+              onTap: () => _confirmResetApp(context, ref),
             ),
-        
             _sectionHeader(AppStrings.aboutTitle),
-        
             FutureBuilder<String>(
               future: versionString(),
               builder: (context, snap) {
@@ -74,7 +64,6 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-        
             if (settingsState.errorMessage != null)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -89,11 +78,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  // ─────────────────────────────────────────────
-  // Currency picker
-  // ─────────────────────────────────────────────
-
-  void _showCurrencyPicker(BuildContext context) {
+  void _showCurrencyPicker(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -101,9 +86,9 @@ class SettingsScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (sheetContext) {
-        // Watch INSIDE the sheet so selected tick stays correct.
-        return Consumer<SettingsState>(
-          builder: (context, settingsState, _) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final settingsState = ref.watch(settingsStateProvider);
             final settings = settingsState.settings;
 
             return SafeArea(
@@ -135,19 +120,18 @@ class SettingsScreen extends StatelessWidget {
                         onTap: () async {
                           Navigator.pop(sheetContext);
 
-                          final ok = await sheetContext
-                              .read<SettingsState>()
+                          final ok = await ref
+                              .read(settingsStateProvider)
                               .setCurrency(code: code, symbol: symbol);
 
                           if (!sheetContext.mounted) return;
 
                           if (!ok) {
-                            final err = sheetContext
-                                .read<SettingsState>()
-                                .errorMessage;
+                            final err =
+                                ref.read(settingsStateProvider).errorMessage;
                             if (err != null) {
                               ErrorToast.show(sheetContext, message: err);
-                              sheetContext.read<SettingsState>().clearError();
+                              ref.read(settingsStateProvider).clearError();
                             }
                           }
                         },
@@ -163,11 +147,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  // ─────────────────────────────────────────────
-  // Confirm dialogs
-  // ─────────────────────────────────────────────
-
-  void _confirmDeleteTransactions(BuildContext context) {
+  void _confirmDeleteTransactions(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -185,11 +165,16 @@ class SettingsScreen extends StatelessWidget {
               Navigator.pop(dialogContext);
 
               if (!context.mounted) return;
-              await context.read<TransactionState>().deleteAll();
+              await ref.read(transactionStateProvider).deleteAll();
+
               if (!context.mounted) return;
-              await context.read<TransactionState>().loadAll(force: true);
+              await ref.read(transactionStateProvider).loadAll(force: true);
+
               if (!context.mounted) return;
-              CustomInfoToast.show(context, message: AppStrings.historyDeleted);
+              CustomInfoToast.show(
+                context,
+                message: AppStrings.historyDeleted,
+              );
             },
           ),
         ],
@@ -197,12 +182,14 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _confirmResetApp(BuildContext context) {
+  void _confirmResetApp(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        return Consumer<AppResetState>(
-          builder: (context, resetState, _) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final resetState = ref.watch(appResetStateProvider);
+
             return AlertDialog(
               title: const Text(AppStrings.resetAppQuestion),
               content: const Text(AppStrings.resetAppBody),
@@ -220,9 +207,7 @@ class SettingsScreen extends StatelessWidget {
                       : () async {
                           Navigator.pop(dialogContext);
 
-                          final ok = await context
-                              .read<AppResetState>()
-                              .reset();
+                          final ok = await ref.read(appResetStateProvider).reset();
 
                           if (!context.mounted) return;
 
@@ -231,12 +216,13 @@ class SettingsScreen extends StatelessWidget {
                               context,
                               message: AppStrings.resetComplete,
                             );
+                            ref.invalidate(startupProvider);
                           } else {
                             final err =
-                                context.read<AppResetState>().errorMessage ??
+                                ref.read(appResetStateProvider).errorMessage ??
                                 AppStrings.resetFail;
                             ErrorToast.show(context, message: err);
-                            context.read<AppResetState>().clearError();
+                            ref.read(appResetStateProvider).clearError();
                           }
                         },
                   child: resetState.loading
@@ -254,10 +240,6 @@ class SettingsScreen extends StatelessWidget {
       },
     );
   }
-
-  // ─────────────────────────────────────────────
-  // UI helpers
-  // ─────────────────────────────────────────────
 
   Widget _sectionHeader(String title) {
     return Padding(

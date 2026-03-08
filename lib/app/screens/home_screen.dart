@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_donation_buttons/donationButtons/ko-fiButton.dart';
 import 'package:flutter_donation_buttons/flutter_donation_buttons.dart';
-import 'package:provider/provider.dart';
 import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/app/screens/settings_screen.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
 import 'package:sloth_budget/app/strings/app_strings.dart';
 import 'package:sloth_budget/app/widgets/balance_card.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
@@ -29,11 +27,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TransactionState>().ensureMinLoaded(10);
-      context.read<BalanceState>().load();
+      ref.read(transactionStateProvider).ensureMinLoaded(10);
+      ref.read(balanceStateProvider).load();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final txnState = context.read<TransactionState>();
+      final txnState = ref.read(transactionStateProvider);
       await txnState.ensureCoversMonth(DateTime.now());
     });
   }

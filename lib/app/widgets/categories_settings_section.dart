@@ -1,39 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/app/state/category_state.dart';
 import 'package:sloth_budget/app/widgets/error_toast.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
 
-class CategoriesSettingsSection extends StatefulWidget {
+class CategoriesSettingsSection extends ConsumerStatefulWidget {
   const CategoriesSettingsSection({super.key});
 
   @override
-  State<CategoriesSettingsSection> createState() =>
+  ConsumerState<CategoriesSettingsSection> createState() =>
       _CategoriesSettingsSectionState();
 }
 
-class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
+class _CategoriesSettingsSectionState
+    extends ConsumerState<CategoriesSettingsSection> {
   List<String>? _items;
+  ProviderSubscription<CategoryState>? _categoriesSub;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final cats = context.watch<CategoryState>().categories;
+  void initState() {
+    super.initState();
 
-    // Only adopt provider list when we don't have a local reorder in progress,
-    // or when lengths changed (add/delete/rename).
-    if (_items == null || _items!.length != cats.length) {
-      _items = List<String>.of(cats);
-    }
+    _categoriesSub = ref.listenManual<CategoryState>(
+      categoryStateProvider,
+      (previous, next) {
+        final cats = next.categories;
+
+        if (_items == null || _items!.length != cats.length) {
+          if (mounted) {
+            setState(() {
+              _items = List<String>.of(cats);
+            });
+          } else {
+            _items = List<String>.of(cats);
+          }
+        }
+      },
+      fireImmediately: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _categoriesSub?.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CategoryState>();
+    final state = ref.watch(categoryStateProvider);
     final categories = _items ?? const <String>[];
 
     const String lockedCategory = 'Subscriptions';
+
     bool isLocked(String c) =>
         c.trim().toLowerCase() == lockedCategory.toLowerCase();
 
@@ -65,15 +86,17 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
               });
 
               Future.microtask(() async {
-                if (!context.mounted) return;
-                await context.read<CategoryState>().reorder(_items!);
+                if (!mounted) return;
 
-                if (!context.mounted) return;
+                await ref.read(categoryStateProvider).reorder(_items!);
 
-                final err = context.read<CategoryState>().errorMessage;
-                if (err != null && mounted) {
+                if (!mounted) return;
+
+                final err = ref.read(categoryStateProvider).errorMessage;
+                if (err != null) {
+                  if (!context.mounted) return;
                   ErrorToast.show(context, message: err);
-                  context.read<CategoryState>().clearError();
+                  ref.read(categoryStateProvider).clearError();
                 }
               });
             },
@@ -85,9 +108,7 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
                 key: ValueKey(c),
                 leading: Icon(locked ? Icons.lock : Icons.label),
                 title: Text(c),
-                onTap: locked
-                    ? null
-                    : () => _renameDialog(context, from: c), // optional
+                onTap: locked ? null : () => _renameDialog(context, from: c),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -96,28 +117,27 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         tooltip: 'Delete',
                         onPressed: () async {
-                          final msg = await context
-                              .read<CategoryState>()
+                          final msg = await ref
+                              .read(categoryStateProvider)
                               .deleteWithRules(c);
 
-                          if (!context.mounted) return;
+                          if (!mounted) return;
 
-                          if (msg != null && mounted) {
+                          if (msg != null) {
+                            if (!context.mounted) return;
                             CustomInfoToast.show(context, message: msg);
-
                           }
 
-                          final err = context
-                              .read<CategoryState>()
-                              .errorMessage;
-                          if (err != null && mounted) {
+                          final err = ref.read(categoryStateProvider).errorMessage;
+                          if (err != null) {
+                            if (!context.mounted) return;
                             ErrorToast.show(context, message: err);
-                            context.read<CategoryState>().clearError();
+                            ref.read(categoryStateProvider).clearError();
                           }
 
                           setState(() {
                             _items = List<String>.of(
-                              context.read<CategoryState>().categories,
+                              ref.read(categoryStateProvider).categories,
                             );
                           });
                         },
@@ -143,7 +163,6 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
               );
             },
           ),
-
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: SizedBox(
@@ -195,17 +214,17 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
           ),
           ElevatedButton(
             onPressed: () async {
-              final ok = await context.read<CategoryState>().add(
-                controller.text,
-              );
+              final ok = await ref
+                  .read(categoryStateProvider)
+                  .add(controller.text);
 
               if (d.mounted) Navigator.pop(d);
 
               if (!ok && context.mounted) {
-                final err = context.read<CategoryState>().errorMessage;
+                final err = ref.read(categoryStateProvider).errorMessage;
                 if (err != null) {
                   ErrorToast.show(context, message: err);
-                  context.read<CategoryState>().clearError();
+                  ref.read(categoryStateProvider).clearError();
                 }
               }
             },
@@ -241,18 +260,17 @@ class _CategoriesSettingsSectionState extends State<CategoriesSettingsSection> {
           ),
           ElevatedButton(
             onPressed: () async {
-              final ok = await context.read<CategoryState>().rename(
-                from,
-                controller.text,
-              );
+              final ok = await ref
+                  .read(categoryStateProvider)
+                  .rename(from, controller.text);
 
               if (d.mounted) Navigator.pop(d);
 
               if (!ok && context.mounted) {
-                final err = context.read<CategoryState>().errorMessage;
+                final err = ref.read(categoryStateProvider).errorMessage;
                 if (err != null) {
                   ErrorToast.show(context, message: err);
-                  context.read<CategoryState>().clearError();
+                  ref.read(categoryStateProvider).clearError();
                 }
               }
             },
