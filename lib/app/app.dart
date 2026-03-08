@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/app/screens/home_screen.dart';
 import 'package:sloth_budget/app/widgets/add_account_modal.dart';
@@ -10,14 +11,14 @@ import 'package:sloth_budget/app/state/category_state.dart';
 import 'package:sloth_budget/features/subscriptions/screens/subscriptions_screen.dart';
 import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_modal.dart';
 
-class SlothBudgetApp extends StatefulWidget {
+class SlothBudgetApp extends ConsumerStatefulWidget {
   const SlothBudgetApp({super.key});
 
   @override
   SlothBudgetAppState createState() => SlothBudgetAppState();
 }
 
-class SlothBudgetAppState extends State<SlothBudgetApp> {
+class SlothBudgetAppState extends ConsumerState<SlothBudgetApp> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
@@ -32,8 +33,8 @@ class SlothBudgetAppState extends State<SlothBudgetApp> {
   }
 
   Future<void> _openAddTransactionModal() async {
-    final accountState = context.read<AccountState>();
-    final categoryState = context.read<CategoryState>();
+    final accountState = ref.read(accountStateProvider);
+    final categoryState = ref.read(categoryStateProvider);
 
     if (accountState.accounts.isEmpty) {
       await accountState.load(force: true);
@@ -54,7 +55,7 @@ class SlothBudgetAppState extends State<SlothBudgetApp> {
   }
 
   Future<void> _openAddSubscriptionModal() async {
-    final accountState = context.read<AccountState>();
+    final accountState = ref.read(accountStateProvider);
 
     if (accountState.accounts.isEmpty) {
       await accountState.load(force: true);

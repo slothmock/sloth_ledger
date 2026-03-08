@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/domain/transactions/transaction.dart';
 import 'package:sloth_budget/features/ledger/modals/add_transaction_modal.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
 import 'package:sloth_budget/features/ledger/state/transaction_state.dart';
 
-class TransactionDetailModal extends StatelessWidget {
+class TransactionDetailModal extends ConsumerStatefulWidget {
   const TransactionDetailModal({
     super.key,
     required this.txn,
@@ -18,17 +18,22 @@ class TransactionDetailModal extends StatelessWidget {
   final BuildContext hostContext;
 
   @override
-  Widget build(BuildContext context) {
-    final title = (txn.merchant?.trim().isNotEmpty ?? false)
-        ? txn.merchant!.trim()
-        : txn.category;
-    final symbol = context.watch<SettingsState>().settings.currencySymbol;
-    final accountName =
-        context.watch<AccountState>().byId(txn.accountId)?.name ??
-        'Account ${txn.accountId}';
+  ConsumerState<TransactionDetailModal> createState() => _TransactionDetailModalState();
+}
 
-    final dt = DateFormat.yMMMMd().add_jm().format(txn.date);
-    final isExpense = txn.isExpense;
+class _TransactionDetailModalState extends ConsumerState<TransactionDetailModal> {
+  @override
+  Padding build(BuildContext context) {
+    final title = (widget.txn.merchant?.trim().isNotEmpty ?? false)
+        ? widget.txn.merchant!.trim()
+        : widget.txn.category;
+    final symbol = ref.watch(settingsStateProvider).settings.currencySymbol;
+    final accountName =
+        ref.watch(accountStateProvider).byId(widget.txn.accountId)?.name ??
+        'Account ${widget.txn.accountId}';
+
+    final dt = DateFormat.yMMMMd().add_jm().format(widget.txn.date);
+    final isExpense = widget.txn.isExpense;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -67,7 +72,7 @@ class TransactionDetailModal extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '$symbol${txn.amount.toStringAsFixed(2)}',
+                    '$symbol${widget.txn.amount.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -82,9 +87,9 @@ class TransactionDetailModal extends StatelessWidget {
 
               _kv('Account', accountName),
               _kv('Date', dt),
-              if ((txn.notes ?? '').trim().isNotEmpty)
-                _kv('Notes', txn.notes!.trim()),
-              if (txn.isTransfer) _kv('Transfer', 'Yes'),
+              if ((widget.txn.notes ?? '').trim().isNotEmpty)
+                _kv('Notes', widget.txn.notes!.trim()),
+              if (widget.txn.isTransfer) _kv('Transfer', 'Yes'),
 
               const SizedBox(height: 16),
 
@@ -102,13 +107,13 @@ class TransactionDetailModal extends StatelessWidget {
                         Navigator.pop(context);
 
                         await showModalBottomSheet(
-                          context: hostContext,
+                          context: widget.hostContext,
                           isScrollControlled: true,
                           useSafeArea: true,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          builder: (_) => AddTransactionModal(transaction: txn),
+                          builder: (_) => AddTransactionModal(transaction: widget.txn),
                         );
                       },
                     ),
@@ -124,11 +129,11 @@ class TransactionDetailModal extends StatelessWidget {
                       label: const Text('Delete'),
                       onPressed: () async {
 
-                        if (txn.id == null) return;
+                        if (widget.txn.id == null) return;
 
-                        await hostContext
+                        await widget.hostContext
                             .read<TransactionState>()
-                            .deleteWithUndo(hostContext, txn);
+                            .deleteWithUndo(widget.hostContext, widget.txn);
                             
                         if (!context.mounted) return;
                         Navigator.pop(context);
