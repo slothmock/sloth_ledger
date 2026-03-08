@@ -1,24 +1,22 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:sloth_budget/app/widgets/error_toast.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/widgets/error_toast.dart';
 
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/app/state/category_state.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/features/ledger/state/transaction_state.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
 
-class AddTransactionModal extends StatefulWidget {
+class AddTransactionModal extends ConsumerStatefulWidget {
   final SlothTransaction? transaction;
 
   const AddTransactionModal({super.key, this.transaction});
 
   @override
-  State<AddTransactionModal> createState() => _AddTransactionModalState();
+  ConsumerState<AddTransactionModal> createState() => _AddTransactionModalState();
 }
 
-class _AddTransactionModalState extends State<AddTransactionModal> {
+class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   final TextEditingController _merchantController = TextEditingController();
@@ -105,7 +103,7 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
     }
 
     final amount = _isExpense ? -raw : raw;
-    final state = context.read<TransactionState>();
+    final state = ref.read(transactionStateProvider);
     final isEdit = widget.transaction != null;
 
     final merchant = _merchantController.text.trim().isEmpty
@@ -173,8 +171,8 @@ class _AddTransactionModalState extends State<AddTransactionModal> {
 
   @override
   Widget build(BuildContext context) {
-    final accountState = context.watch<AccountState>();
-    final categoryState = context.watch<CategoryState>();
+    final accountState = ref.watch(accountStateProvider);
+    final categoryState = ref.watch(categoryStateProvider);
 
     final accounts = accountState.accounts;
     final categories = categoryState.categories;

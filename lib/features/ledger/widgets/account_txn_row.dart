@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
 class AccountTxnRow extends StatelessWidget {
   const AccountTxnRow({

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/settings_repository.dart';
-import 'package:sloth_budget/domain/app_settings/app_settings.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/settings_repository.dart';
+import 'package:sloth_ledger/domain/app_settings/app_settings.dart';
 
 class SettingsState extends ChangeNotifier {
   SettingsState(this._repo);

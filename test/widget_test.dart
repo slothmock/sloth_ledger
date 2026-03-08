@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sloth_budget/app/app.dart';
+import 'package:sloth_ledger/app/app.dart';
 
 
 void main() {

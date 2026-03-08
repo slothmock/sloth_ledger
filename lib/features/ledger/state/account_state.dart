@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/account_repository.dart';
-import 'package:sloth_budget/domain/accounts/account.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/account_repository.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
 
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/features/ledger/state/balance_state.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/features/ledger/state/balance_state.dart';
 
 class AccountState extends ChangeNotifier {
   BalanceState _balances;

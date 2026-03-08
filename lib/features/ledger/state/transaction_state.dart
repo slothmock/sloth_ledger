@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/transaction_repository.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/app/widgets/undo_toast.dart';
-import 'package:sloth_budget/features/ledger/state/balance_state.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/transaction_repository.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/app/widgets/undo_toast.dart';
+import 'package:sloth_ledger/features/ledger/state/balance_state.dart';
 
 class TransactionState extends ChangeNotifier {
   BalanceState _balances;

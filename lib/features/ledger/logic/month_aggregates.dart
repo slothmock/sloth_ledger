@@ -1,6 +1,6 @@
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
 
 DateTime startOfMonth(DateTime now) => DateTime(now.year, now.month, 1);
 

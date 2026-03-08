@@ -1,4 +1,4 @@
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
 
 class SlothAccount {
   final int? id;

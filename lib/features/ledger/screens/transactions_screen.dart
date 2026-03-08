@@ -1,24 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
-import 'package:sloth_budget/features/ledger/utils/relative_labels.dart';
+import 'package:sloth_ledger/features/ledger/utils/relative_labels.dart';
 
-import 'package:sloth_budget/app/state/category_state.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
 
-class TransactionsScreen extends StatefulWidget {
+class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 
   @override
-  State<TransactionsScreen> createState() => _TransactionsScreenState();
+  ConsumerState<TransactionsScreen> createState() => _TransactionsScreenState();
 }
 
-class _TransactionsScreenState extends State<TransactionsScreen> {
+class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   int? _accountId; // null = all
   String? _category; // null = all
   bool _showSearch = false;
@@ -41,12 +40,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
-        context.read<TransactionState>().loadMore();
+        ref.read(transactionStateProvider).loadMore();
       }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TransactionState>().recent(limit: 25);
+      ref.read(transactionStateProvider).recent(limit: 25);
     });
   }
 
@@ -78,9 +77,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     });
   }
 
-  void _openFilters(BuildContext context) {
-    final accountState = context.read<AccountState>();
-    final categoryState = context.read<CategoryState>();
+  void _openFilters(BuildContext context, WidgetRef ref) {
+    final accountState = ref.read(accountStateProvider);
+    final categoryState = ref.read(categoryStateProvider);
 
     showModalBottomSheet(
       context: context,
@@ -290,12 +289,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final txnState = context.watch<TransactionState>();
-    final settings = context.watch<SettingsState>().settings;
+  Listener build(BuildContext context) {
+    final txnState = ref.watch(transactionStateProvider);
+    final settings = ref.watch(settingsStateProvider).settings;
     final symbol = settings.currencySymbol;
 
-    final accountState = context.watch<AccountState>();
+    final accountState = ref.watch(accountStateProvider);
 
     final base = txnState.filteredAll(
       accountId: _accountId,
@@ -367,7 +366,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.filter_list),
-              onPressed: () => _openFilters(context),
+              onPressed: () => _openFilters(context, ref),
               tooltip: 'Filter',
             ),
             if (txnState.refreshingAll)
@@ -419,9 +418,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  await context.read<TransactionState>().loadAll(force: true);
+                  await ref.read(transactionStateProvider).loadAll(force: true);
                   if (!context.mounted) return;
-                  await context.read<BalanceState>().load(force: true);
+                  await ref.read(balanceStateProvider).load(force: true);
                 },
                 child: Builder(
                   builder: (context) {

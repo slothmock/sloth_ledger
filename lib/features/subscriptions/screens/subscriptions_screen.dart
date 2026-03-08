@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/error_toast.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
-import 'package:sloth_budget/features/subscriptions/subscriptions.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/error_toast.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/features/subscriptions/subscriptions.dart';
 
-class SubscriptionsScreen extends StatefulWidget {
+class SubscriptionsScreen extends ConsumerStatefulWidget {
   const SubscriptionsScreen({super.key});
 
   @override
-  State<SubscriptionsScreen> createState() => _SubscriptionsScreenState();
+  ConsumerState<SubscriptionsScreen> createState() => _SubscriptionsScreenState();
 }
 
-class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
+class _SubscriptionsScreenState extends ConsumerState<SubscriptionsScreen> {
   Future<void> _refresh(BuildContext context) async {
-    await context.read<SubscriptionState>().load(force: true);
+    await ref.read(subscriptionStateProvider).load(force: true);
     if (!context.mounted) return;
-    final error = context.read<SubscriptionState>().errorMessage;
+    final error = ref.read(subscriptionStateProvider).errorMessage;
     if (error != null) {
       if (!context.mounted) return;
       ErrorToast.show(context, message: error);
-    } else if (context.read<SubscriptionState>().all.isEmpty) {
+    } else if (ref.read(subscriptionStateProvider).all.isEmpty) {
       if (!context.mounted) return;
       CustomInfoToast.show(
         context,
@@ -37,13 +38,13 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SubscriptionState>().load();
+      ref.read(subscriptionStateProvider).load();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final subState = context.watch<SubscriptionState>();
+    final subState = ref.watch(subscriptionStateProvider);
 
     final subs = List.of(subState.all)
       ..sort((a, b) {

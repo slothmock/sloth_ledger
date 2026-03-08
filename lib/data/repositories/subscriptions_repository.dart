@@ -1,7 +1,7 @@
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/db/db_service.dart';
-import 'package:sloth_budget/domain/subscriptions/subscription.dart';
-import 'package:sloth_budget/features/subscriptions/logic/interval_helper.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/db/db_service.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription.dart';
+import 'package:sloth_ledger/features/subscriptions/logic/interval_helper.dart';
 
 class SubscriptionRepository {
   SubscriptionRepository({DBService? db}) : _db = db ?? DBService();

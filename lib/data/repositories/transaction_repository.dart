@@ -1,8 +1,8 @@
 import 'package:uuid/uuid.dart';
 
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/data/db/db_service.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/data/db/db_service.dart';
 
 class TransactionRepository {
   TransactionRepository({DBService? db}) : _db = db ?? DBService();

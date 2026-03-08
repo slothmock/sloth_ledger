@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_donation_buttons/donationButtons/ko-fiButton.dart';
 import 'package:flutter_donation_buttons/flutter_donation_buttons.dart';
-import 'package:provider/provider.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/screens/settings_screen.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/balance_card.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/app/screens/settings_screen.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/balance_card.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
 
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
 
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TransactionState>().ensureMinLoaded(10);
-      context.read<BalanceState>().load();
+      ref.read(transactionStateProvider).ensureMinLoaded(10);
+      ref.read(balanceStateProvider).load();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final txnState = context.read<TransactionState>();
+      final txnState = ref.read(transactionStateProvider);
       await txnState.ensureCoversMonth(DateTime.now());
     });
   }
@@ -44,18 +44,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _refresh(BuildContext context) async {
     await Future.wait([
-      context.read<TransactionState>().refreshAll(),
-      context.read<SettingsState>().load(force: true),
-      context.read<BalanceState>().load(force: true),
+      ref.read(transactionStateProvider).refreshAll(),
+      ref.read(settingsStateProvider).load(force: true),
+      ref.read(balanceStateProvider).load(force: true),
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final accountState = context.watch<AccountState>();
-    final txnState = context.watch<TransactionState>();
-    final settingsState = context.watch<SettingsState>();
-    final balances = context.watch<BalanceState>();
+    final accountState = ref.watch(accountStateProvider);
+    final txnState = ref.watch(transactionStateProvider);
+    final settingsState = ref.watch(settingsStateProvider);
+    final balances = ref.watch(balanceStateProvider);
 
     final settings = settingsState.settings;
     final recentTxns = txnState.recent(limit: 5);
