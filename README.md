@@ -18,6 +18,15 @@ The app highlights subscriptions that are coming up or overdue so nothing slips 
 I created this because I wanted something simple, private, and free. 
 If this app helps someone (or anyone) else, that's amazing, but it's primarily built for my own financial clarity.
 
+## Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/ui stitch.png" width="100%">
+</p>
+
+- The screenshot above shows the default empty state when the app is first opened.  
+- Current dashboard totals are early-stage and represent cash plus tracked investment value. This will be refined with better asset/liability separation and liquidity handling in future versions.
+
 ## Personal Roadmap
 
 This project is changing as my financial needs change.  
@@ -55,12 +64,3 @@ The guiding constraint is simple. Transactions define reality. Everything else i
 ## Expectations
 
 This is a personal project. It may change frequently. Features may evolve or be refactored as the architecture matures.
-
-## Screenshots
-
-<p align="center">
-  <img src="assets/screenshots/ui stitch.png" width="100%">
-</p>
-
-- The screenshot above shows the default empty state when the app is first opened.  
-- Current dashboard totals are early-stage and represent cash plus tracked investment value. This will be refined with better asset/liability separation and liquidity handling in future versions.
