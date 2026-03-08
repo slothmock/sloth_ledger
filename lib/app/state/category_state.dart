@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/category_repository.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/category_repository.dart';
 
 class CategoryState extends ChangeNotifier {
   CategoryState(this._repo);

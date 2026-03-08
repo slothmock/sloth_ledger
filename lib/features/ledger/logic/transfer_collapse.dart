@@ -1,5 +1,5 @@
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
 
 List<SlothTransaction> collapseTransfers(
   List<SlothTransaction> txns,

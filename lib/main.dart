@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
-import 'package:sloth_budget/app/app.dart';
-import 'package:sloth_budget/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/app.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

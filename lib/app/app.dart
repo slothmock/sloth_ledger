@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/screens/home_screen.dart';
-import 'package:sloth_budget/app/widgets/add_account_modal.dart';
-import 'package:sloth_budget/app/widgets/bottom_nav_bar.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/app/screens/home_screen.dart';
+import 'package:sloth_ledger/app/widgets/add_account_modal.dart';
+import 'package:sloth_ledger/app/widgets/bottom_nav_bar.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
-import 'package:sloth_budget/features/subscriptions/screens/subscriptions_screen.dart';
-import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_modal.dart';
+import 'package:sloth_ledger/features/subscriptions/screens/subscriptions_screen.dart';
+import 'package:sloth_ledger/features/subscriptions/widgets/add_subscription_modal.dart';
 
 class SlothBudgetApp extends ConsumerStatefulWidget {
   const SlothBudgetApp({super.key});

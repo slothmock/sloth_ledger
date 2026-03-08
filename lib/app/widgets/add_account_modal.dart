@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/error_toast.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/error_toast.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
 
-import 'package:sloth_budget/domain/accounts/account.dart';
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
 
 class AddAccountModal extends StatefulWidget {
   const AddAccountModal({super.key, this.account});

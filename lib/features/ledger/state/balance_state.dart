@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/balance_repository.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/balance_repository.dart';
 
 class BalanceState extends ChangeNotifier {
   BalanceState(this._repo);

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
 
-import 'package:sloth_budget/domain/accounts/account.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
 enum _AccountMetricMode { balance, netContrib }
 

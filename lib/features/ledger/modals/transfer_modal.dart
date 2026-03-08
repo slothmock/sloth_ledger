@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sloth_budget/app/widgets/error_toast.dart';
+import 'package:sloth_ledger/app/widgets/error_toast.dart';
 
-import 'package:sloth_budget/domain/accounts/account.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/features/ledger/state/transaction_state.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/features/ledger/state/transaction_state.dart';
 
 class TransferModal extends StatefulWidget {
   const TransferModal({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sloth_budget/app/utils/currency_formatter.dart';
+import 'package:sloth_ledger/app/utils/currency_formatter.dart';
 
 class BalanceCard extends StatelessWidget {
   final String label;

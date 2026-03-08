@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/error_toast.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
-import 'package:sloth_budget/features/subscriptions/subscriptions.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/error_toast.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/features/subscriptions/subscriptions.dart';
 
 class SubscriptionsScreen extends ConsumerStatefulWidget {
   const SubscriptionsScreen({super.key});

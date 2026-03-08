@@ -1,5 +1,5 @@
-import 'package:sloth_budget/domain/subscriptions/subscription.dart';
-import 'package:sloth_budget/domain/subscriptions/subscription_enums.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription_enums.dart';
 
 double monthlyEquivalent(SlothSubscription s) {
   switch (s.interval) {

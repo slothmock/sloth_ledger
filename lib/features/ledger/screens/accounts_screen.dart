@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
 
-import 'package:sloth_budget/domain/accounts/account.dart';
-import 'package:sloth_budget/features/ledger/screens/account_details_screen.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
+import 'package:sloth_ledger/features/ledger/screens/account_details_screen.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
 
-import 'package:sloth_budget/features/ledger/modals/transfer_modal.dart';
-import 'package:sloth_budget/app/widgets/add_account_modal.dart';
+import 'package:sloth_ledger/features/ledger/modals/transfer_modal.dart';
+import 'package:sloth_ledger/app/widgets/add_account_modal.dart';
 
 class AccountsScreen extends ConsumerStatefulWidget {
   const AccountsScreen({super.key});

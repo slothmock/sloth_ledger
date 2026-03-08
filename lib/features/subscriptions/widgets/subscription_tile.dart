@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/utils/currency_formatter.dart';
-import 'package:sloth_budget/domain/subscriptions/subscription.dart';
-import 'package:sloth_budget/features/subscriptions/widgets/subscription_detail_modal.dart';
-import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_modal.dart';
-import 'package:sloth_budget/features/subscriptions/logic/monthly_equivalents.dart';
+import 'package:sloth_ledger/app/utils/currency_formatter.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription.dart';
+import 'package:sloth_ledger/features/subscriptions/widgets/subscription_detail_modal.dart';
+import 'package:sloth_ledger/features/subscriptions/widgets/add_subscription_modal.dart';
+import 'package:sloth_ledger/features/subscriptions/logic/monthly_equivalents.dart';
 
 class SubscriptionTile extends ConsumerStatefulWidget {
   const SubscriptionTile({

@@ -1,4 +1,4 @@
-import 'package:sloth_budget/domain/subscriptions/subscription_enums.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription_enums.dart';
 
 class SlothSubscription {
   final int? id;

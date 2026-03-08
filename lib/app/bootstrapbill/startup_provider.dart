@@ -1,20 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/app/state/app_reset_state.dart';
-import 'package:sloth_budget/app/state/category_state.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
-import 'package:sloth_budget/data/db/db_service.dart';
-import 'package:sloth_budget/data/repositories/account_repository.dart';
-import 'package:sloth_budget/data/repositories/app_reset_repository.dart';
-import 'package:sloth_budget/data/repositories/balance_repository.dart';
-import 'package:sloth_budget/data/repositories/category_repository.dart';
-import 'package:sloth_budget/data/repositories/settings_repository.dart';
-import 'package:sloth_budget/data/repositories/subscriptions_repository.dart';
-import 'package:sloth_budget/data/repositories/transaction_repository.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
-import 'package:sloth_budget/features/subscriptions/subscriptions.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/app/state/app_reset_state.dart';
+import 'package:sloth_ledger/app/state/category_state.dart';
+import 'package:sloth_ledger/app/state/settings_state.dart';
+import 'package:sloth_ledger/data/db/db_service.dart';
+import 'package:sloth_ledger/data/repositories/account_repository.dart';
+import 'package:sloth_ledger/data/repositories/app_reset_repository.dart';
+import 'package:sloth_ledger/data/repositories/balance_repository.dart';
+import 'package:sloth_ledger/data/repositories/category_repository.dart';
+import 'package:sloth_ledger/data/repositories/settings_repository.dart';
+import 'package:sloth_ledger/data/repositories/subscriptions_repository.dart';
+import 'package:sloth_ledger/data/repositories/transaction_repository.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
+import 'package:sloth_ledger/features/subscriptions/subscriptions.dart';
 
 final balanceRepoProvider = Provider<BalanceRepository>((ref) {
   return BalanceRepository();

@@ -1,8 +1,8 @@
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/domain/app_settings/app_settings.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/domain/app_settings/app_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:sloth_budget/domain/transactions/transaction.dart';
+import 'package:sloth_ledger/domain/transactions/transaction.dart';
 
 class DBService {
   // Singleton
@@ -23,7 +23,7 @@ class DBService {
 
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'sloth_budget.db');
+    final path = join(dbPath, 'sloth_ledger.db');
 
     return await openDatabase(
       path,

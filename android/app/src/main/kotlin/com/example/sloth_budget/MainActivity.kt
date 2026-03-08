@@ -1,4 +1,4 @@
-package com.example.sloth_budget
+package com.example.sloth_ledger
 
 import io.flutter.embedding.android.FlutterActivity
 

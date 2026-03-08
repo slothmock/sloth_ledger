@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/subscriptions_repository.dart';
-import 'package:sloth_budget/domain/subscriptions/subscription.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/subscriptions_repository.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription.dart';
 
 class SubscriptionState extends ChangeNotifier {
   SubscriptionState(this._repo);

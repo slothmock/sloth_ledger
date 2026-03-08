@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/data/repositories/app_reset_repository.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/features/ledger/state/balance_state.dart';
-import 'package:sloth_budget/app/state/category_state.dart';
-import 'package:sloth_budget/app/state/settings_state.dart';
-import 'package:sloth_budget/features/ledger/state/transaction_state.dart';
-import 'package:sloth_budget/features/subscriptions/subscriptions.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/data/repositories/app_reset_repository.dart';
+import 'package:sloth_ledger/features/ledger/state/account_state.dart';
+import 'package:sloth_ledger/features/ledger/state/balance_state.dart';
+import 'package:sloth_ledger/app/state/category_state.dart';
+import 'package:sloth_ledger/app/state/settings_state.dart';
+import 'package:sloth_ledger/features/ledger/state/transaction_state.dart';
+import 'package:sloth_ledger/features/subscriptions/subscriptions.dart';
 
 class AppResetState extends ChangeNotifier {
   AppResetState(this._repo);

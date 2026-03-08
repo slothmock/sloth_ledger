@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_donation_buttons/donationButtons/ko-fiButton.dart';
 import 'package:flutter_donation_buttons/flutter_donation_buttons.dart';
-import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/screens/settings_screen.dart';
-import 'package:sloth_budget/app/strings/app_strings.dart';
-import 'package:sloth_budget/app/widgets/balance_card.dart';
-import 'package:sloth_budget/app/widgets/info_toast.dart';
+import 'package:sloth_ledger/app/screens/settings_screen.dart';
+import 'package:sloth_ledger/app/strings/app_strings.dart';
+import 'package:sloth_ledger/app/widgets/balance_card.dart';
+import 'package:sloth_ledger/app/widgets/info_toast.dart';
 
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
 
-import 'package:sloth_budget/features/ledger/ledger.dart';
+import 'package:sloth_ledger/features/ledger/ledger.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

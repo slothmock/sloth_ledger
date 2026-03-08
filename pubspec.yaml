@@ -1,7 +1,7 @@
-name: sloth_budget
-description: "A new Flutter project."
+name: sloth_ledger
+description: "A simple ledger app for tracking expenses, income, and subscriptions."
 publish_to: 'none'
-version: 0.1.0+69
+version: 0.1.2+1
 
 environment:
   sdk: ^3.10.8

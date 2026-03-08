@@ -1,8 +1,8 @@
-import 'package:sloth_budget/domain/accounts/account_enums.dart';
-import 'package:sloth_budget/app/logging/app_logger.dart';
-import 'package:sloth_budget/domain/accounts/account.dart';
-import 'package:sloth_budget/data/db/db_service.dart';
-import 'package:sloth_budget/domain/subscriptions/subscription.dart';
+import 'package:sloth_ledger/domain/accounts/account_enums.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
+import 'package:sloth_ledger/domain/accounts/account.dart';
+import 'package:sloth_ledger/data/db/db_service.dart';
+import 'package:sloth_ledger/domain/subscriptions/subscription.dart';
 
 
 class AccountRepository {
