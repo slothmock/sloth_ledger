@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 import 'package:sloth_budget/app/strings/app_strings.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
 
@@ -11,9 +12,14 @@ import 'package:sloth_budget/features/ledger/state/balance_state.dart';
 import 'package:sloth_budget/features/ledger/modals/transfer_modal.dart';
 import 'package:sloth_budget/app/widgets/add_account_modal.dart';
 
-class AccountsScreen extends StatelessWidget {
+class AccountsScreen extends ConsumerStatefulWidget {
   const AccountsScreen({super.key});
 
+  @override
+  ConsumerState<AccountsScreen> createState() => _AccountsScreenState();
+}
+
+class _AccountsScreenState extends ConsumerState<AccountsScreen> {
   void _openAccountModal(BuildContext context, {SlothAccount? account}) {
     showModalBottomSheet(
       context: context,
@@ -26,7 +32,7 @@ class AccountsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AccountState>();
+    final state = ref.watch(accountStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,30 +46,35 @@ class AccountsScreen extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({required this.state, required this.onEdit});
 
   final AccountState state;
   final void Function(SlothAccount acc) onEdit;
 
   @override
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  @override
   Widget build(BuildContext context) {
-    final balances = context.watch<BalanceState>();
+    final balances = ref.watch(balanceStateProvider);
 
     // First-load spinner only if we have no cached data yet
-    if (state.loading && state.accounts.isEmpty) {
+    if (widget.state.loading && widget.state.accounts.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (state.accounts.isEmpty) {
+    if (widget.state.accounts.isEmpty) {
       return const Center(child: Text(AppStrings.noAccounts));
     }
 
     return SafeArea(
       child: ListView.builder(
-        itemCount: state.accounts.length,
+        itemCount: widget.state.accounts.length,
         itemBuilder: (context, index) {
-          final acc = state.accounts[index];
+          final acc = widget.state.accounts[index];
           final accountBalance = (acc.id == null)
               ? acc.openingBalance
               : (balances.accountBalances[acc.id!] ?? acc.openingBalance);
@@ -88,7 +99,7 @@ class _Body extends StatelessWidget {
                   icon: const Icon(Icons.edit, size: 18),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
-                  onPressed: () => onEdit(acc),
+                  onPressed: () => widget.onEdit(acc),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
@@ -96,8 +107,8 @@ class _Body extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () async {
-                    final msg = await context
-                        .read<AccountState>()
+                    final msg = await ref
+                        .read(accountStateProvider)
                         .deleteWithRules(acc.id!);
                     if (msg != null && context.mounted) {
                       CustomInfoToast.show(context, message: msg);

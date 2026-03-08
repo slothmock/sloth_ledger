@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 import 'package:sloth_budget/domain/accounts/account_enums.dart';
 import 'package:sloth_budget/app/strings/app_strings.dart';
 
@@ -46,35 +47,40 @@ String _metricLabelCurrent(_AccountMetricMode mode) {
   }
 }
 
-class AccountDetailScreen extends StatelessWidget {
+class AccountDetailScreen extends ConsumerStatefulWidget {
   const AccountDetailScreen({super.key, required this.account});
 
   final SlothAccount account;
 
   @override
-  Widget build(BuildContext context) {
-    final mode = _metricModeFor(account);
+  ConsumerState<AccountDetailScreen> createState() => _AccountDetailScreenState();
+}
 
-    final txnState = context.watch<TransactionState>();
+class _AccountDetailScreenState extends ConsumerState<AccountDetailScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final mode = _metricModeFor(widget.account);
+
+    final txnState = ref.watch(transactionStateProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!txnState.loading && txnState.all.isEmpty) {
-        context.read<TransactionState>().loadAll();
+        ref.read(transactionStateProvider).loadAll();
       }
     });
 
-    final balances = context.watch<BalanceState>();
-    final settings = context.watch<SettingsState>().settings;
-    final currencySymbol = balances.accountBalances[account.id!] != null
+    final balances = ref.watch(balanceStateProvider);
+    final settings = ref.read(settingsStateProvider).settings;
+    final currencySymbol = balances.accountBalances[widget.account.id!] != null
         ? settings.currencySymbol
-        : account.currency;
+        : widget.account.currency;
 
     final currentMetric =
-        balances.accountBalances[account.id!] ?? account.openingBalance;
+        balances.accountBalances[widget.account.id!] ?? widget.account.openingBalance;
 
 
     final txnsAsc = List<SlothTransaction>.of(
-      txnState.allForAccount(account.id!),
+      txnState.allForAccount(widget.account.id!),
     )..sort((a, b) => a.date.compareTo(b.date));
 
     final inTotal = txnsAsc
@@ -88,13 +94,13 @@ class AccountDetailScreen extends StatelessWidget {
     final netTotal = txnsAsc.fold<double>(0, (sum, t) => sum + t.amount);
 
     return Scaffold(
-      appBar: AppBar(title: Text(account.name)),
+      appBar: AppBar(title: Text(widget.account.name)),
       body: Column(
         children: [
           _Header(
-            account: account,
+            account: widget.account,
             mode: mode,
-            openingValue: account.openingBalance,
+            openingValue: widget.account.openingBalance,
             currentValue: currentMetric,
             currencySymbol: currencySymbol,
             inTotal: inTotal,
@@ -104,7 +110,7 @@ class AccountDetailScreen extends StatelessWidget {
           const Divider(height: 1),
           Expanded(
             child: _TxnList(
-              account: account,
+              account: widget.account,
               mode: mode,
               txnsAsc: txnsAsc,
               currencySymbol: currencySymbol,
