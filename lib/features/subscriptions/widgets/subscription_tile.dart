@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_budget/app/utils/currency_formatter.dart';
 import 'package:sloth_budget/domain/subscriptions/subscription.dart';
@@ -11,7 +13,7 @@ import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_mod
 import 'package:sloth_budget/features/subscriptions/state/subscriptions_state.dart';
 import 'package:sloth_budget/features/subscriptions/logic/monthly_equivalents.dart';
 
-class SubscriptionTile extends StatelessWidget {
+class SubscriptionTile extends ConsumerStatefulWidget {
   const SubscriptionTile({
     super.key,
     required this.sub,
@@ -20,27 +22,32 @@ class SubscriptionTile extends StatelessWidget {
   final SlothSubscription sub;
 
   @override
+  ConsumerState<SubscriptionTile> createState() => _SubscriptionTileState();
+}
+
+class _SubscriptionTileState extends ConsumerState<SubscriptionTile> {
+  @override
   Widget build(BuildContext context) {
     final accountName =
-        context.watch<AccountState>().byId(sub.accountId)?.name ??
-        'Account ${sub.accountId}';
+        ref.watch(accountStateProvider).byId(widget.sub.accountId)?.name ??
+        'Account ${widget.sub.accountId}';
 
-    final due = DateFormat.yMMMd().format(sub.nextDue);
+    final due = DateFormat.yMMMd().format(widget.sub.nextDue);
 
     final amountText = CurrencyFormatter.compact(
-      sub.amount,
-      symbol: sub.currency,
+      widget.sub.amount,
+      symbol: widget.sub.currency,
     );
 
-    final intervalLabel = intervalLabelHelper(sub.interval.name);
+    final intervalLabel = intervalLabelHelper(widget.sub.interval.name);
 
     return ListTile(
       leading: Icon(
-        sub.isActive ? Icons.autorenew : Icons.pause_circle_outline,
-        color: sub.isActive ? Colors.teal : Colors.grey,
+        widget.sub.isActive ? Icons.autorenew : Icons.pause_circle_outline,
+        color: widget.sub.isActive ? Colors.teal : Colors.grey,
       ),
       title: Text(
-        sub.name,
+        widget.sub.name,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -59,7 +66,7 @@ class SubscriptionTile extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
           ),
           const SizedBox(width: 6),
-          _ActionsMenu(sub: sub),
+          _ActionsMenu(sub: widget.sub),
         ],
       ),
 
@@ -71,7 +78,7 @@ class SubscriptionTile extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          builder: (_) => SubscriptionDetailModal(sub: sub),
+          builder: (_) => SubscriptionDetailModal(sub: widget.sub),
         );
       },
     );
@@ -80,10 +87,15 @@ class SubscriptionTile extends StatelessWidget {
 
 enum _SubAction { markPaid, snooze7, skipOnce, edit, delete }
 
-class _ActionsMenu extends StatelessWidget {
+class _ActionsMenu extends ConsumerStatefulWidget {
   const _ActionsMenu({required this.sub});
   final SlothSubscription sub;
 
+  @override
+  ConsumerState<_ActionsMenu> createState() => _ActionsMenuState();
+}
+
+class _ActionsMenuState extends ConsumerState<_ActionsMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<_SubAction>(
@@ -91,7 +103,7 @@ class _ActionsMenu extends StatelessWidget {
       icon: const Icon(Icons.more_vert),
       onSelected: (action) async {
         final rootCtx = Navigator.of(context, rootNavigator: true).context;
-        final state = rootCtx.read<SubscriptionState>();
+        final state = ref.watch(subscriptionStateProvider);
 
         Future<void> showMsg(String msg, {bool error = false}) async {
           ScaffoldMessenger.of(rootCtx)
@@ -106,11 +118,11 @@ class _ActionsMenu extends StatelessWidget {
 
         switch (action) {
           case _SubAction.markPaid: {
-            if (!sub.isActive) {
+            if (!widget.sub.isActive) {
               await showMsg('Subscription is paused', error: true);
               return;
             }
-            final ok = await state.markPaid(sub: sub); // implement in state
+            final ok = await state.markPaid(sub: widget.sub); // implement in state
             if (!rootCtx.mounted) return;
             if (!ok) {
               await showMsg(state.errorMessage ?? 'Mark paid failed', error: true);
@@ -122,7 +134,7 @@ class _ActionsMenu extends StatelessWidget {
           }
 
           case _SubAction.snooze7: {
-            final ok = await state.snooze(sub, days: 7); // implement in state
+            final ok = await state.snooze(widget.sub, days: 7); // implement in state
             if (!rootCtx.mounted) return;
             if (!ok) {
               await showMsg(state.errorMessage ?? 'Snooze failed', error: true);
@@ -134,7 +146,7 @@ class _ActionsMenu extends StatelessWidget {
           }
 
           case _SubAction.skipOnce: {
-            final ok = await state.skipOnce(sub); // implement in state
+            final ok = await state.skipOnce(widget.sub); // implement in state
             if (!rootCtx.mounted) return;
             if (!ok) {
               await showMsg(state.errorMessage ?? 'Skip failed', error: true);
@@ -153,7 +165,7 @@ class _ActionsMenu extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              builder: (_) => AddSubscriptionModal(subscription: sub),
+              builder: (_) => AddSubscriptionModal(subscription: widget.sub),
             );
             return;
           }
@@ -180,7 +192,7 @@ class _ActionsMenu extends StatelessWidget {
 
             if (confirm != true) return;
 
-            final ok = await state.delete(sub.id!);
+            final ok = await state.delete(widget.sub.id!);
             if (!rootCtx.mounted) return;
 
             if (!ok) {

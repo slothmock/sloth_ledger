@@ -69,7 +69,7 @@ class AppStrings {
                              'Add your first subscription to see upcoming payments.';
   
   static const subActive = 'Active';                      
-  static const subDueSoon = 'Due soon (7 days)';
+  static const subDueSoon = 'Due Soon';
   static const subDueLater = 'Later';
   static const subPaused = 'Paused';
   static const subOverdue = 'Overdue';

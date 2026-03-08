@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 import 'package:sloth_budget/app/widgets/error_toast.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
 
 import 'package:sloth_budget/domain/subscriptions/subscription.dart';
-import 'package:sloth_budget/features/ledger/ledger.dart';
 import 'package:sloth_budget/features/subscriptions/state/subscriptions_state.dart';
 import 'package:sloth_budget/features/subscriptions/widgets/add_subscription_modal.dart';
 
 
-class SubscriptionDetailModal extends StatelessWidget {
+class SubscriptionDetailModal extends ConsumerStatefulWidget {
   const SubscriptionDetailModal({super.key, required this.sub});
 
   final SlothSubscription sub;
 
   @override
+  ConsumerState<SubscriptionDetailModal> createState() => _SubscriptionDetailModalState();
+}
+
+class _SubscriptionDetailModalState extends ConsumerState<SubscriptionDetailModal> {
+  @override
   Widget build(BuildContext context) {
-    final subState = context.watch<SubscriptionState>();
-    bool activeSub = sub.isActive;
+    final subState = ref.watch(subscriptionStateProvider);
+    bool activeSub = widget.sub.isActive;
 
     final accountName =
-        context.watch<AccountState>().byId(sub.accountId)?.name ??
-        'Account ${sub.accountId}';
+        ref.watch(accountStateProvider).byId(widget.sub.accountId)?.name ??
+        'Account ${widget.sub.accountId}';
 
-    final due = DateFormat.yMMMMd().format(sub.nextDue);
+    final due = DateFormat.yMMMMd().format(widget.sub.nextDue);
 
     final busy = subState.loading;
 
@@ -51,13 +57,13 @@ class SubscriptionDetailModal extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    sub.isActive ? Icons.autorenew : Icons.pause_circle_outline,
-                    color: sub.isActive ? Colors.blueGrey : Colors.grey,
+                    widget.sub.isActive ? Icons.autorenew : Icons.pause_circle_outline,
+                    color: widget.sub.isActive ? Colors.blueGrey : Colors.grey,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      sub.name,
+                      widget.sub.name,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
@@ -70,11 +76,11 @@ class SubscriptionDetailModal extends StatelessWidget {
               const SizedBox(height: 12),
               const Divider(),
 
-              _kv('Amount', sub.amount.toStringAsFixed(2)),
-              _kv('Interval', sub.interval.label),
+              _kv('Amount', widget.sub.amount.toStringAsFixed(2)),
+              _kv('Interval', widget.sub.interval.label),
               _kv('Next due', due),
               _kv('Paid from', accountName),
-              _kv('Status', sub.isActive ? 'Active' : 'Paused'),
+              _kv('Status', widget.sub.isActive ? 'Active' : 'Paused'),
 
               const SizedBox(height: 16),
 
@@ -89,27 +95,25 @@ class SubscriptionDetailModal extends StatelessWidget {
                       ? null
                       : () async {
 
-                          final ok = await context
-                              .read<SubscriptionState>()
-                              .markPaid(sub: sub);
+                          final ok = await ref
+                              .read(subscriptionStateProvider)
+                              .markPaid(sub: widget.sub);
 
                           if (!context.mounted) return;
 
                           if (!ok) {
-                            final msg = context
-                                .read<SubscriptionState>()
+                            final msg = ref
+                                .read(subscriptionStateProvider)
                                 .errorMessage ??
                                 'Mark as paid failed';
                             if (!context.mounted) return;
                             CustomInfoToast.show(context, message: msg);
-                            context.read<SubscriptionState>().clearError();
+                            ref.read(subscriptionStateProvider).clearError();
                           } else {
                             if (!context.mounted) return;
                             CustomInfoToast.show(context, message: 'Marked as paid', duration: const Duration(seconds: 2));
-                            if (!context.mounted) return;
-                            await context.read<BalanceState>().load(force: true);
-                            if (!context.mounted) return;
-                            await context.read<TransactionState>().refreshAll();
+                            await ref.read(accountStateProvider).load(force: true);
+                            await ref.read(subscriptionStateProvider).load();
                             if (!context.mounted) return;
                             Navigator.pop(context);
                           }
@@ -138,7 +142,7 @@ class SubscriptionDetailModal extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 builder: (_) =>
-                                    AddSubscriptionModal(subscription: sub),
+                                    AddSubscriptionModal(subscription: widget.sub),
                               );
                             },
                     ),
@@ -159,7 +163,7 @@ class SubscriptionDetailModal extends StatelessWidget {
 
                               final ok = await context
                                   .read<SubscriptionState>()
-                                  .delete(sub.id!);
+                                  .delete(widget.sub.id!);
 
                               if (!context.mounted) return;
 

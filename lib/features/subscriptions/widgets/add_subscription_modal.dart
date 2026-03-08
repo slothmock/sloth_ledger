@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:sloth_budget/app/bootstrapbill/startup_provider.dart';
 
-import 'package:sloth_budget/app/state/settings_state.dart';
 import 'package:sloth_budget/app/widgets/error_toast.dart';
 import 'package:sloth_budget/app/widgets/info_toast.dart';
 import 'package:sloth_budget/domain/subscriptions/subscription.dart';
-import 'package:sloth_budget/features/ledger/state/account_state.dart';
-import 'package:sloth_budget/features/subscriptions/state/subscriptions_state.dart';
 
-class AddSubscriptionModal extends StatefulWidget {
+class AddSubscriptionModal extends ConsumerStatefulWidget {
   const AddSubscriptionModal({super.key, this.subscription});
 
   final SlothSubscription? subscription;
 
   @override
-  State<AddSubscriptionModal> createState() => _AddSubscriptionModalState();
+  ConsumerState<AddSubscriptionModal> createState() => _AddSubscriptionModalState();
 }
 
-class _AddSubscriptionModalState extends State<AddSubscriptionModal> {
+class _AddSubscriptionModalState extends ConsumerState<AddSubscriptionModal> {
   final _name = TextEditingController();
   final _amount = TextEditingController();
 
@@ -79,9 +77,9 @@ class _AddSubscriptionModalState extends State<AddSubscriptionModal> {
       return;
     }
 
-    final currencyCode = context.read<SettingsState>().settings.currencyCode;
+    final currencyCode = ref.read(settingsStateProvider).settings.currencyCode;
 
-    final state = context.read<SubscriptionState>();
+    final state = ref.read(subscriptionStateProvider);
     final isEdit = widget.subscription?.id != null;
 
     Navigator.pop(context);
@@ -121,7 +119,7 @@ class _AddSubscriptionModalState extends State<AddSubscriptionModal> {
 
   @override
   Widget build(BuildContext context) {
-    final accounts = context.watch<AccountState>().accounts;
+    final accounts = ref.watch(accountStateProvider).accounts;
     final isEdit = widget.subscription != null;
 
     if (_accountId == null && accounts.isNotEmpty) {
