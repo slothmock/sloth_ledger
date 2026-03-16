@@ -62,15 +62,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final collapsedRecent = collapseTransfers(recentTxns, accountState);
 
     final cash = balances.totalFor(
-      currencyCode: settings.currencyCode,
+      currencyCode: accountState.accounts.where((a) => a.category == AccountCategory.fiat).firstOrNull?.currency ?? settings.currencyCode,
       category: AccountCategory.fiat,
     );
-    final investments = balances.totalFor(
-      currencyCode: settings.currencyCode,
-      category: AccountCategory.investments,
-    );
 
-    final netWorth = cash + investments;
+
+    final netWorth = cash;
 
     final cs = Theme.of(context).colorScheme;
 

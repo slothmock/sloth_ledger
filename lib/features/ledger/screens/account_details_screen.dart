@@ -14,8 +14,6 @@ _AccountMetricMode _metricModeFor(SlothAccount a) {
   switch (a.category) {
     case AccountCategory.fiat:
       return _AccountMetricMode.balance;
-    case AccountCategory.investments:
-      return _AccountMetricMode.netContrib;
   }
 }
 

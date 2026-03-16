@@ -1,4 +1,4 @@
-enum AccountCategory { fiat, investments }
+enum AccountCategory { fiat }
 
 extension AccountCategoryX on AccountCategory {
   String get dbValue => name;
@@ -7,9 +7,6 @@ extension AccountCategoryX on AccountCategory {
     switch (this) {
       case AccountCategory.fiat:
         return 'Fiat';
-      case AccountCategory.investments:
-        return 'Investments';
-
     }
   }
 
@@ -27,9 +24,6 @@ enum AccountType {
   cash,
   bank,
 
-  // Investments
-  physicalAssets,
-
 
 }
 
@@ -42,8 +36,6 @@ extension AccountTypeX on AccountType {
         return 'Cash';
       case AccountType.bank:
         return 'Bank Account';
-      case AccountType.physicalAssets:
-        return 'Physical Assets';
     }
   }
 
@@ -60,7 +52,5 @@ List<AccountType> accountTypesFor(AccountCategory category) {
   switch (category) {
     case AccountCategory.fiat:
       return const [AccountType.cash, AccountType.bank];
-    case AccountCategory.investments:
-      return const [AccountType.physicalAssets];
   }
 }
