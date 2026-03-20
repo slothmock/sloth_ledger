@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
 
 import 'package:sloth_ledger/app/strings/app_strings.dart';
 import 'package:sloth_ledger/app/widgets/error_toast.dart';
@@ -7,18 +8,17 @@ import 'package:sloth_ledger/app/widgets/info_toast.dart';
 
 import 'package:sloth_ledger/domain/accounts/account.dart';
 import 'package:sloth_ledger/domain/accounts/account_enums.dart';
-import 'package:sloth_ledger/features/ledger/state/account_state.dart';
 
-class AddAccountModal extends StatefulWidget {
+class AddAccountModal extends ConsumerStatefulWidget {
   const AddAccountModal({super.key, this.account});
 
   final SlothAccount? account;
 
   @override
-  State<AddAccountModal> createState() => _AddAccountModalState();
+  ConsumerState<AddAccountModal> createState() => _AddAccountModalState();
 }
 
-class _AddAccountModalState extends State<AddAccountModal> {
+class _AddAccountModalState extends ConsumerState<AddAccountModal> {
   final _name = TextEditingController();
   final _opening = TextEditingController();
 
@@ -77,7 +77,7 @@ class _AddAccountModalState extends State<AddAccountModal> {
       return;
     }
 
-    final state = context.read<AccountState>();
+    final state = ref.watch(accountStateProvider);
     final isEdit = widget.account?.id != null;
 
     Navigator.pop(context);
@@ -172,6 +172,7 @@ class _AddAccountModalState extends State<AddAccountModal> {
                   TextField(
                     controller: _opening,
                     keyboardType: const TextInputType.numberWithOptions(
+                      signed: true,
                       decimal: true,
                     ),
                     decoration: const InputDecoration(

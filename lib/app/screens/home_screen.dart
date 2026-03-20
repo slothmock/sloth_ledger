@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_donation_buttons/donationButtons/ko-fiButton.dart';
 import 'package:flutter_donation_buttons/flutter_donation_buttons.dart';
 import 'package:sloth_ledger/app/bootstrapbill/startup_provider.dart';
+import 'package:sloth_ledger/app/logging/app_logger.dart';
 
 import 'package:sloth_ledger/app/screens/settings_screen.dart';
 import 'package:sloth_ledger/app/strings/app_strings.dart';
@@ -61,13 +62,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final recentTxns = txnState.recent(limit: 5);
     final collapsedRecent = collapseTransfers(recentTxns, accountState);
 
-    final cash = balances.totalFor(
-      currencyCode: accountState.accounts.where((a) => a.category == AccountCategory.fiat).firstOrNull?.currency ?? settings.currencyCode,
+    final gbp = balances.totalFor(
+      currencyCode: 'GBP',
+      category: AccountCategory.fiat,
+    );
+    final usd = balances.totalFor(
+      currencyCode: 'USD',
+      category: AccountCategory.fiat,
+    );
+    final eur = balances.totalFor(
+      currencyCode: 'EUR',
       category: AccountCategory.fiat,
     );
 
+    // TODO: Handle currency conversion properly, using real exchange rates and user preferences.
+    // For now, we'll just do a hardcoded conversion for le demo.
+    final cash = gbp + usd * 1.25 + eur * 1.1; // Assume 1 USD = 1.25 GBP and 1 EUR = 1.1 GBP for simplicity
 
-    final netWorth = cash;
+    log.d('HomeScreen build: cash=$cash, recentTxns=${recentTxns.length}, settings=${settingsState.settings}');
 
     final cs = Theme.of(context).colorScheme;
 
@@ -111,16 +123,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       children: [
                         Expanded(
                           child: BalanceCard(
-                            label: AppStrings.cashTypeLabel,
+                            label: AppStrings.totalCashLabel,
                             amount: cash,
-                            currencySymbol: settings.currencySymbol,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: BalanceCard(
-                            label: AppStrings.netWorthLabel,
-                            amount: netWorth,
                             currencySymbol: settings.currencySymbol,
                           ),
                         ),

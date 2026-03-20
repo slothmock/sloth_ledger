@@ -31,7 +31,7 @@ class AppStrings {
 
   // Balance
   static const invalidStartBalance = 'Enter a valid starting balance';
-  static const cashTypeLabel = 'Cash Available';
+  static const totalCashLabel = 'Total Funds';
   static const investmentTypeLabel = 'Investments';
   static const cryptoTypeLabel = 'Crypto';
   static const monthNetLabel = 'This Month';
