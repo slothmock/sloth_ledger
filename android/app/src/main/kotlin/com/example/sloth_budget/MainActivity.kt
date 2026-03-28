@@ -1,4 +1,4 @@
-package com.example.sloth_ledger
+package com.slothmock.plog
 
 import io.flutter.embedding.android.FlutterActivity
 

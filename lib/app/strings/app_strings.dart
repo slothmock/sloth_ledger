@@ -1,6 +1,6 @@
 class AppStrings {
   // Titles
-  static const appName = 'Sloth\'s Ledger App';
+  static const appName = 'PLOG';
   static const overviewTitle = 'Home';
   static const ledgerTitle = 'Ledger';
   static const accountsTitle = 'Accounts';
