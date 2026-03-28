@@ -11,7 +11,8 @@ class SubscriptionsScreen extends ConsumerStatefulWidget {
   const SubscriptionsScreen({super.key});
 
   @override
-  ConsumerState<SubscriptionsScreen> createState() => _SubscriptionsScreenState();
+  ConsumerState<SubscriptionsScreen> createState() =>
+      _SubscriptionsScreenState();
 }
 
 class _SubscriptionsScreenState extends ConsumerState<SubscriptionsScreen> {
@@ -24,10 +25,7 @@ class _SubscriptionsScreenState extends ConsumerState<SubscriptionsScreen> {
       ErrorToast.show(context, message: error);
     } else if (ref.read(subscriptionStateProvider).all.isEmpty) {
       if (!context.mounted) return;
-      CustomInfoToast.show(
-        context,
-        message: AppStrings.subsNotFound
-      );
+      CustomInfoToast.show(context, message: AppStrings.subsNotFound);
     } else {
       if (!context.mounted) return;
       CustomInfoToast.show(context, message: AppStrings.subsRefreshed);
@@ -61,9 +59,7 @@ class _SubscriptionsScreenState extends ConsumerState<SubscriptionsScreen> {
       });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppStrings.subscriptionsTitle),
-      ),
+      appBar: AppBar(title: const Text(AppStrings.subscriptionsTitle)),
       body: RefreshIndicator(
         onRefresh: () => _refresh(context),
         child: Builder(
@@ -102,51 +98,54 @@ class _SubscriptionsScreenState extends ConsumerState<SubscriptionsScreen> {
               return ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  const SizedBox(height: 140),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.18),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 28),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.autorenew,
-                          size: 52,
-                          color: Colors.grey.shade400,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          AppStrings.noSubscriptions,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                    child: Center(
+                      heightFactor: 1.5,
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.autorenew,
+                            size: 52,
+                            color: Colors.grey.shade400,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          AppStrings.addSubsBody,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            height: 1.35,
+                          const SizedBox(height: 16),
+                          const Text(
+                            AppStrings.noSubscriptions,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 18),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              useSafeArea: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              builder: (_) => const AddSubscriptionModal(),
-                            );
-                          },
-                          icon: const Icon(Icons.add),
-                          label: const Text(AppStrings.addSubscription),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            AppStrings.addSubsBody,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              height: 1.35,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 18),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                useSafeArea: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                builder: (_) => const AddSubscriptionModal(),
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text(AppStrings.addSubscription),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -308,8 +307,12 @@ class _SubscriptionsSummaryCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Expanded(child: _metric(AppStrings.subOverdue, '$overdueCount')),
-                Expanded(child: _metric(AppStrings.subDueSoon, '$dueSoonCount')),
+                Expanded(
+                  child: _metric(AppStrings.subOverdue, '$overdueCount'),
+                ),
+                Expanded(
+                  child: _metric(AppStrings.subDueSoon, '$dueSoonCount'),
+                ),
                 Expanded(child: _metric(AppStrings.subActive, '$activeCount')),
                 Expanded(child: _metric(AppStrings.subPaused, '$pausedCount')),
               ],

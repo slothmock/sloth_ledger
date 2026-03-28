@@ -463,108 +463,111 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 48,
-                                  color: Colors.grey.shade400,
-                                ),
-                                const SizedBox(height: 16),
-
-                                if (isTrulyEmpty &&
-                                    !hasFilters &&
-                                    !hasSearch) ...[
-                                  const Text(
-                                    'No transactions yet',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    textAlign: TextAlign.center,
+                            child: Center(
+                              heightFactor: 1.5,
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.receipt_long,
+                                    size: 52,
+                                    color: Colors.grey.shade400,
                                   ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Your ledger will show all income and expenses here.\n'
-                                    'Add your first transaction to get started.',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      height: 1.4,
+                                  const SizedBox(height: 16),
+                              
+                                  if (isTrulyEmpty &&
+                                      !hasFilters &&
+                                      !hasSearch) ...[
+                                    const Text(
+                                      'No transactions yet...',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ElevatedButton.icon(
-                                    icon: const Icon(Icons.add),
-                                    label: const Text('Add transaction'),
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        useSafeArea: true,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Your ledger will show all income and expenses here.\n'
+                                      'Add your first transaction to get started.',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        height: 1.35,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 18),
+                                    ElevatedButton.icon(
+                                      icon: const Icon(Icons.add),
+                                      label: const Text('Add transaction'),
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          useSafeArea: true,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
                                           ),
-                                        ),
-                                        builder: (_) =>
-                                            const AddTransactionModal(),
-                                      );
-                                    },
-                                  ),
-                                ] else if (hasFilters && !hasSearch) ...[
-                                  const Text(
-                                    'No matching transactions',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
+                                          builder: (_) =>
+                                              const AddTransactionModal(),
+                                        );
+                                      },
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Your current filters exclude all transactions.',
-                                    style: TextStyle(color: Colors.grey),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _accountId = null;
-                                        _category = null;
-                                      });
-                                    },
-                                    child: const Text('Clear filters'),
-                                  ),
-                                ] else if (hasSearch) ...[
-                                  const Text(
-                                    'No search results',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
+                                  ] else if (hasFilters && !hasSearch) ...[
+                                    const Text(
+                                      'No matching transactions',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Try a different keyword, amount, or date.',
-                                    style: TextStyle(color: Colors.grey),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _queryRaw = '';
-                                        _queryApplied = '';
-                                        _searchController.clear();
-                                      });
-                                    },
-                                    child: const Text('Clear search'),
-                                  ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Your current filters exclude all transactions.',
+                                      style: TextStyle(color: Colors.grey),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _accountId = null;
+                                          _category = null;
+                                        });
+                                      },
+                                      child: const Text('Clear filters'),
+                                    ),
+                                  ] else if (hasSearch) ...[
+                                    const Text(
+                                      'No search results',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Try a different keyword, amount, or date.',
+                                      style: TextStyle(color: Colors.grey),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _queryRaw = '';
+                                          _queryApplied = '';
+                                          _searchController.clear();
+                                        });
+                                      },
+                                      child: const Text('Clear search'),
+                                    ),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ],
