@@ -24,7 +24,6 @@ class _AddAccountModalState extends ConsumerState<AddAccountModal> {
 
   AccountCategory _category = AccountCategory.fiat;
   AccountType? _type;
-  String _currency = 'GBP';
 
   @override
   void initState() {
@@ -36,7 +35,6 @@ class _AddAccountModalState extends ConsumerState<AddAccountModal> {
     _opening.text = (a?.openingBalance ?? 0.0).toStringAsFixed(2);
 
     _category = a?.category ?? AccountCategory.fiat;
-    _currency = a?.currency ?? 'GBP';
 
     final allowed = accountTypesFor(_category);
 
@@ -88,7 +86,7 @@ class _AddAccountModalState extends ConsumerState<AddAccountModal> {
         name: name,
         category: _category,
         type: type,
-        currency: _currency,
+        currency: 'GBP',
         openingBalance: opening,
       );
     } else {
@@ -96,7 +94,7 @@ class _AddAccountModalState extends ConsumerState<AddAccountModal> {
         name: name,
         category: _category,
         type: type,
-        currency: _currency,
+        currency: 'GBP',
         openingBalance: opening,
       );
     }
@@ -216,22 +214,6 @@ class _AddAccountModalState extends ConsumerState<AddAccountModal> {
                     onChanged: (v) => setState(() => _type = v),
                     decoration: const InputDecoration(
                       labelText: 'Type',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  DropdownButtonFormField<String>(
-                    initialValue: _currency,
-                    items: const [
-                      DropdownMenuItem(value: 'GBP', child: Text('£ GBP')),
-                      DropdownMenuItem(value: 'USD', child: Text(r'$ USD')),
-                      DropdownMenuItem(value: 'EUR', child: Text('€ EUR')),
-                    ],
-                    onChanged: (v) =>
-                        setState(() => _currency = v ?? _currency),
-                    decoration: const InputDecoration(
-                      labelText: 'Currency',
                       border: OutlineInputBorder(),
                     ),
                   ),

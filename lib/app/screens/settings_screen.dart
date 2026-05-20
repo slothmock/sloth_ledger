@@ -12,16 +12,10 @@ import 'package:sloth_ledger/app/widgets/info_toast.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const List<Map<String, String>> _currencies = [
-    {'code': 'GBP', 'symbol': '£'},
-    {'code': 'USD', 'symbol': '\$'},
-    {'code': 'EUR', 'symbol': '€'},
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsState = ref.watch(settingsStateProvider);
-    final settings = settingsState.settings;
 
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.settingsTitle)),
@@ -29,15 +23,6 @@ class SettingsScreen extends ConsumerWidget {
         child: ListView(
           children: [
             const SizedBox(height: 8),
-            _sectionHeader(AppStrings.generalTitle),
-            ListTile(
-              leading: const Icon(Icons.currency_exchange),
-              title: const Text(AppStrings.defaultCurrency),
-              subtitle: Text(
-                '${settings.currencySymbol} ${settings.currencyCode}',
-              ),
-              onTap: () => _showCurrencyPicker(context, ref),
-            ),
             const CategoriesSettingsSection(),
             _sectionHeader(AppStrings.dataTitle),
             ListTile(
@@ -78,74 +63,7 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showCurrencyPicker(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (sheetContext) {
-        return Consumer(
-          builder: (context, ref, _) {
-            final settingsState = ref.watch(settingsStateProvider);
-            final settings = settingsState.settings;
 
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      AppStrings.selectCurrencyTitle,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ..._currencies.map((currency) {
-                      final code = currency['code']!;
-                      final symbol = currency['symbol']!;
-                      final isSelected = code == settings.currencyCode;
-
-                      return ListTile(
-                        leading: Text(
-                          symbol,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        title: Text(code),
-                        trailing: isSelected ? const Icon(Icons.check) : null,
-                        onTap: () async {
-                          Navigator.pop(sheetContext);
-
-                          final ok = await ref
-                              .read(settingsStateProvider)
-                              .setCurrency(code: code, symbol: symbol);
-
-                          if (!sheetContext.mounted) return;
-
-                          if (!ok) {
-                            final err =
-                                ref.read(settingsStateProvider).errorMessage;
-                            if (err != null) {
-                              ErrorToast.show(sheetContext, message: err);
-                              ref.read(settingsStateProvider).clearError();
-                            }
-                          }
-                        },
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
 
   void _confirmDeleteTransactions(BuildContext context, WidgetRef ref) {
     showDialog(

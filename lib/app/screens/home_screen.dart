@@ -62,24 +62,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final recentTxns = txnState.recent(limit: 5);
     final collapsedRecent = collapseTransfers(recentTxns, accountState);
 
-    final gbp = balances.totalFor(
+    final cashTotal = balances.totalFor(
       currencyCode: 'GBP',
       category: AccountCategory.fiat,
     );
-    final usd = balances.totalFor(
-      currencyCode: 'USD',
-      category: AccountCategory.fiat,
-    );
-    final eur = balances.totalFor(
-      currencyCode: 'EUR',
-      category: AccountCategory.fiat,
-    );
 
-    // TODO: Handle currency conversion properly, using real exchange rates and user preferences.
-    // For now, we'll just do a hardcoded conversion for le demo.
-    final cash = gbp + usd * 1.25 + eur * 1.1; // Assume 1 USD = 1.25 GBP and 1 EUR = 1.1 GBP for simplicity
 
-    log.d('HomeScreen build: cash=$cash, recentTxns=${recentTxns.length}, settings=${settingsState.settings}');
+    log.d('HomeScreen build: cash=$cashTotal, recentTxns=${recentTxns.length}, settings=${settingsState.settings}');
 
     final cs = Theme.of(context).colorScheme;
 
@@ -124,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Expanded(
                           child: BalanceCard(
                             label: AppStrings.totalCashLabel,
-                            amount: cash,
+                            amount: cashTotal,
                             currencySymbol: settings.currencySymbol,
                           ),
                         ),

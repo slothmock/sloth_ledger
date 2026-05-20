@@ -76,9 +76,6 @@ class AppStrings {
 
 
   // Settings
-  static const defaultCurrency = 'Default Currency';
-  static const selectCurrencyTitle = 'Select Currency';
-  static const generalTitle = 'General';
   static const categoriesTitle = 'Categories';
   static const deleteHistoryTitle = 'Delete transaction history';
   static const dataTitle = 'Data';

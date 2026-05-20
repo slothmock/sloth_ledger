@@ -55,22 +55,4 @@ class SettingsState extends ChangeNotifier {
     _inFlightLoad = f;
     return f;
   }
-
-  Future<bool> setCurrency({required String code, required String symbol}) async {
-    _setError(null);
-    _setLoading(true);
-
-    try {
-      log.i('SettingsState.setCurrency(code=$code, symbol=$symbol)');
-      await _repo.setCurrency(code: code, symbol: symbol);
-      await load(force: true);
-      return true;
-    } catch (e, st) {
-      log.e('SettingsState.setCurrency() failed', error: e, stackTrace: st);
-      _setError('Failed to update currency.');
-      _setLoading(false);
-      notifyListeners();
-      return false;
-    }
-  }
 }
